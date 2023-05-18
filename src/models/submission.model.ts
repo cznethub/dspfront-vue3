@@ -1,5 +1,5 @@
 import { ISubmission, EnumRepositoryKeys } from '@/components/submissions/types'
-import { Model } from '@vuex-orm/core'
+import { Model, useRepo } from 'pinia-orm'
 import axios from "axios"
 import User from './user.model'
 import {
@@ -32,7 +32,7 @@ export default class Submission extends Model implements ISubmission {
   public metadata!: any
 
   static get $state(): ISubmisionState {
-    return this.store().state.entities[this.entity]
+    return useRepo(this).all()
   }
 
   static state() {

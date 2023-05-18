@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import { Model, useRepo } from 'pinia-orm'
 import { EnumRepositoryKeys, IRepository, IRepositoryUrls } from '@/components/submissions/types'
 import { repoMetadata } from "@/components/submit/constants"
 import { Subject } from 'rxjs'
@@ -42,7 +42,7 @@ export default class Repository extends Model implements IRepository {
   }
 
   static get $state() {
-    return this.store().state.entities[this.entity]
+    return useRepo(this).all()
   }
 
   // static get activeRepository() {

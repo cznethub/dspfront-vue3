@@ -1,5 +1,5 @@
 import { router } from '@/router'
-import { Model } from '@vuex-orm/core'
+import { Model, useRepo } from 'pinia-orm'
 import { Subject } from 'rxjs'
 import { RawLocation } from 'vue-router'
 import axios from "axios"
@@ -31,7 +31,7 @@ export default class User extends Model {
   }
 
   static get $state(): IUserState {
-    return this.store().state.entities[this.entity]
+    return useRepo(this).all()
   }
 
   static get next() {
