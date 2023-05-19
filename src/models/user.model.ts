@@ -73,11 +73,9 @@ export default class User extends Model {
             message: 'You have logged in!',
             type: 'success'
           })
-          await User.commit((state) => {
-            state.isLoggedIn = true
-            state.orcid = message.data.orcid
-            state.orcidAccessToken = message.data.token
-          })
+          this.state().isLoggedIn = true
+          this.state().orcid = message.data.orcid
+          this.state().orcidAccessToken = message.data.token
           document.cookie = `Authorization=Bearer ${message.data.token}; expires=${message.data.expiresIn}; path=/`
           this.isLoginListenerSet = false 
           this.loggedIn$.next()
@@ -104,16 +102,12 @@ export default class User extends Model {
       
       if (response.status !== 200) {
         // Something went wrong, authorization may be invalid
-        User.commit((state) => {
-          state.isLoggedIn = false
-        })
+        this.state().isLoggedIn = false
       }
     }
     catch(e: any) {
       // console.log(e.response.status)
-      User.commit((state) => {
-        state.isLoggedIn = false
-      })
+      this.state().isLoggedIn = false
     }
   }
 
@@ -129,10 +123,8 @@ export default class User extends Model {
   }
 
   private static async _logOut() {
-    await User.commit((state) => {
-      state.isLoggedIn = false,
-      state.orcidAccessToken = ''
-    })
+    this.state().isLoggedIn = false,
+    this.state().orcidAccessToken = ''
     this.isLoginListenerSet = false
 
     CzNotification.toast({ 

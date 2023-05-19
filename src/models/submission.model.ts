@@ -149,9 +149,7 @@ export default class Submission extends Model implements ISubmission {
   static async fetchSubmissions() {
     console.log("Fetching submissions...")
     try {
-      this.commit((state) => {
-        return state.isFetching = true
-      })
+      this.state().isFetching = true
       
       const response = await axios.get('/api/submissions', { 
         params: { "access_token": User.$state.orcidAccessToken }
@@ -166,15 +164,11 @@ export default class Submission extends Model implements ISubmission {
         // User has been logged out
         User.logOut()
       }
-      this.commit((state) => {
-        return state.isFetching = false
-      })
+      this.state().isFetching = false
       return response.status
     }
     catch(e: any) {
-      this.commit((state) => {
-        return state.isFetching = false
-      })
+      this.state().isFetching = false
       return e.response.status
     }
   }
